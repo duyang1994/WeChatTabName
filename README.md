@@ -13,6 +13,7 @@
 > **下载**：本仓库 Releases 里的 `WeChatTabName-1.0.0.zip`（exe + 说明 + 源码）
 > **压缩包内容**：`WeChatTabName.exe` + `README.md` + `LICENSE` + `build.bat` + `src/` 源码；分发二进制时附带源码是 GPL-3.0 的要求，也可以自己改、自己编译。
 > **反馈**：[问卷星匿名反馈表](https://v.wjx.cn/vm/hdMJwYV.aspx#)（不用注册、不用 GitHub）
+> 
 > **支持**：[爱发电](https://afdian.com/a/HXY7338LOVE)（纯自愿，功能全部免费）
 
 
