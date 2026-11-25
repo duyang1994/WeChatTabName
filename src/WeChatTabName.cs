@@ -462,7 +462,7 @@ namespace WeChatTabName
             _cfg = Config.Load();
 
             _tray = new NotifyIcon();
-            _tray.Icon = SystemIcons.Application;
+            _tray.Icon = LoadAppIcon();
             _tray.Text = "微信任务栏改名";
             _tray.Visible = true;
 
@@ -755,6 +755,18 @@ namespace WeChatTabName
             {
                 Info("设置开机启动失败：" + ex.Message);
             }
+        }
+
+        /// <summary>托盘图标用 exe 自带的图标（绿色气泡），取不到才退回系统默认。</summary>
+        private static Icon LoadAppIcon()
+        {
+            try
+            {
+                var ico = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+                if (ico != null) return ico;
+            }
+            catch { }
+            return SystemIcons.Application;
         }
 
         private void UpdateStatus()
