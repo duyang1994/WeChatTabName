@@ -1,0 +1,11 @@
+* text=auto
+
+# build.bat 必须是 CRLF，否则 cmd 解析失败
+*.bat text eol=crlf
+
+*.cs  text eol=lf
+*.md  text eol=lf
+
+*.ico binary
+*.exe binary
+*.zip binary

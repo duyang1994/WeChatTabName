@@ -1,0 +1,18 @@
+# 构建产物
+*.exe
+*.pdb
+*.zip
+.stage/
+
+# 发布暂存（按版本号分目录，正式发布走 GitHub Releases）
+dist/
+
+# 开发目录（调试脚本、本地数据，可能含个人信息）
+dev/
+
+# 编辑器 / 系统
+.vs/
+*.user
+*.suo
+Thumbs.db
+desktop.ini
