@@ -347,7 +347,12 @@ namespace WeChatTabName
 
     internal sealed class RenameForm : Form
     {
+        // 任务栏按钮宽度有限：半角字符算 1，全角（汉字等）算 2，总宽不超过 20
+        private const int MaxHalfWidth = 20;
+
         private readonly TextBox _box;
+        private readonly Label _hint;
+        private bool _fixing;
 
         public string Value { get { return _box.Text; } }
 
@@ -359,38 +364,86 @@ namespace WeChatTabName
             MaximizeBox = false;
             MinimizeBox = false;
             TopMost = true;
-            ClientSize = new Size(372, 112);
+            ClientSize = new Size(372, 138);
             Font = new Font("Microsoft YaHei UI", 9f);
 
             var label = new Label();
-            label.Text = "这个名字会显示在任务栏上：";
+            label.Text = "想叫什么都行，这个名字会显示在任务栏上：";
             label.AutoSize = true;
             label.Location = new Point(16, 16);
             Controls.Add(label);
 
             _box = new TextBox();
-            _box.Text = current;
+            _box.Text = Truncate(current);
             _box.Location = new Point(16, 42);
             _box.Width = 336;
+            _box.TextChanged += new EventHandler(OnTextChanged);
             Controls.Add(_box);
+
+            _hint = new Label();
+            _hint.AutoSize = true;
+            _hint.ForeColor = SystemColors.GrayText;
+            _hint.Location = new Point(16, 70);
+            Controls.Add(_hint);
 
             var ok = new Button();
             ok.Text = "确定";
             ok.DialogResult = DialogResult.OK;
-            ok.Location = new Point(196, 78);
+            ok.Location = new Point(196, 100);
             ok.Width = 76;
             Controls.Add(ok);
 
             var cancel = new Button();
             cancel.Text = "取消";
             cancel.DialogResult = DialogResult.Cancel;
-            cancel.Location = new Point(278, 78);
+            cancel.Location = new Point(278, 100);
             cancel.Width = 76;
             Controls.Add(cancel);
 
             AcceptButton = ok;
             CancelButton = cancel;
+            UpdateHint();
             _box.SelectAll();
+        }
+
+        private void OnTextChanged(object sender, EventArgs e)
+        {
+            if (_fixing) return;
+            if (HalfWidth(_box.Text) > MaxHalfWidth)
+            {
+                _fixing = true;
+                int caret = _box.SelectionStart;
+                _box.Text = Truncate(_box.Text);
+                _box.SelectionStart = Math.Min(caret, _box.Text.Length);
+                _fixing = false;
+            }
+            UpdateHint();
+        }
+
+        private void UpdateHint()
+        {
+            _hint.Text = "最多 10 个汉字或 20 个英文字符（已用 " + HalfWidth(_box.Text) + "/" + MaxHalfWidth + "）";
+        }
+
+        private static int HalfWidth(string s)
+        {
+            int w = 0;
+            foreach (char ch in s) w += (ch >= 0x2E80) ? 2 : 1;
+            return w;
+        }
+
+        private static string Truncate(string s)
+        {
+            var sb = new StringBuilder();
+            int w = 0;
+            foreach (char ch in s)
+            {
+                int cw = (ch >= 0x2E80) ? 2 : 1;
+                if (w + cw > MaxHalfWidth) break;
+                sb.Append(ch);
+                w += cw;
+            }
+            return sb.ToString();
         }
     }
 
