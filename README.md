@@ -12,6 +12,8 @@
 
 > **下载**：本仓库 Releases 里的 `WeChatTabName-1.0.0.zip`（exe + 说明 + 源码）
 > **压缩包内容**：`WeChatTabName.exe` + `README.md` + `LICENSE` + `build.bat` + `src/` 源码；分发二进制时附带源码是 GPL-3.0 的要求，也可以自己改、自己编译。
+> **反馈**：[问卷星匿名反馈表](https://v.wjx.cn/vm/hdMJwYV.aspx#)（不用注册、不用 GitHub）
+> **支持**：[爱发电](https://afdian.com/a/HXY7338LOVE)（纯自愿，功能全部免费）
 
 
 ## 使用方法
@@ -234,7 +236,9 @@ A：支持，每个账号按一次 `Ctrl+Alt+R` 起名即可，没有数量限�
 
 ## 反馈与贡献
 
-**上不了 GitHub 也能反馈**：到 [爱发电主页](https://afdian.com/a/HXY7338LOVE) 发私信即可（作者需要在爱发电后台把「接收私信」打开）。
+**最省事**：[问卷星匿名反馈表](https://v.wjx.cn/vm/hdMJwYV.aspx#) —— 不用注册、不用 GitHub，填完直接提交。
+
+**想直接聊**：到 [爱发电主页](https://afdian.com/a/HXY7338LOVE) 发私信（需要注册爱发电；作者需在后台把「接收私信」打开）。
 
 **有 GitHub 的**：提 Issue 请附 Windows 版本、微信版本、`config.ini` 内容（**wxid 请截掉后 4 位**）、现象截图。
 
