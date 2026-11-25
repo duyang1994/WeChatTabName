@@ -11,9 +11,7 @@
 - SHA-256：`C62430F8D18BDA08B7BB5EB800FE4B17600C1C34092BFA852F22A8A9E48EBFA4`
 
 > **下载**：本仓库 Releases 里的 `WeChatTabName-1.0.0.zip`（exe + 说明 + 源码）
-> **源码**：`src/`，编译方法见「构建」
 
----
 
 ## 使用方法
 
@@ -27,7 +25,6 @@
 ### 2. 开机自启（建议）
 
 托盘图标右键 → 勾选「开机自动启动」。
-（实现方式：写一条 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`，不勾就不写。）
 
 ### 3. 给每个微信起名字
 
@@ -41,12 +38,12 @@
 
 Windows 11 默认只显示图标，二选一：
 
-- 装 Windhawk 的 `Taskbar Labels for Windows 11`，模式选 `labelsWithoutCombining`；
 - 或 系统设置 → 个性化 → 任务栏 → 任务栏行为 →「合并任务栏按钮并隐藏标签」→「从不」。
+- 装 Windhawk 的 `Taskbar Labels for Windows 11`，模式选 `labelsWithoutCombining`；
 
 ### 5. 改名
 
-任何时候切到那个微信窗口，按 `Ctrl+Alt+R` 重新输入即可，2 秒内生效。
+任何时候切到需要改名的微信窗口，按 `Ctrl+Alt+R` 重新输入即可，2 秒内生效。
 
 ## 命名规则
 
@@ -54,7 +51,6 @@ Windows 11 默认只显示图标，二选一：
 - 长度上限：**10 个汉字 或 20 个英文字符**（按显示宽度算：1 个汉字占 2，1 个英文字母/数字/符号占 1）；
 - 输入框到达上限会自动截断，并显示「已用 x/20」；
 - 为什么要有上限：任务栏按钮宽度有限，过长的名字会被系统截断，还会把别的窗口挤掉；
-- 直接改配置文件可以写更长的名字，但任务栏同样会截断显示。
 
 ## 它解决什么问题
 
@@ -89,70 +85,6 @@ Windows 11 任务栏默认「合并按钮 + 隐藏标签」，多开两个微信
 
 > 只有极老的 Win10 精简版才可能缺 .NET Framework 4.x，那种机器装一下微软官方运行库即可。
 
-## 目录结构
-
-仓库（开发用）：
-
-```
-WeChatTabName/
-├─ src/                   源码
-│  ├─ WeChatTabName.cs    全部源码
-│  ├─ AssemblyInfo.cs     版本信息
-│  ├─ app.manifest        应用清单
-│  ├─ app.ico             图标
-│  └─ make-icon.cs        图标生成器（可选）
-├─ dist/                  发布暂存，按版本号分目录（不进 git）
-│  └─ 1.0.0/
-│     ├─ WeChatTabName.exe
-│     ├─ WeChatTabName-1.0.0.zip
-│     └─ SHA256SUMS.txt
-├─ build.bat              一键编译
-├─ README.md
-├─ CHANGELOG.md
-├─ LICENSE
-├─ .gitignore
-└─ .gitattributes
-```
-
-发行包（zip 解压后）：
-
-```
-WeChatTabName-1.0.0/
-├─ WeChatTabName.exe      主程序（唯一需要运行的）
-├─ README.md
-├─ CHANGELOG.md
-├─ LICENSE
-├─ build.bat
-└─ src/                   源码
-```
-
-配置文件在 `%APPDATA%\WeChatTabName\config.ini`：
-
-```ini
-# WeChatTabName config
-DataRoot=D:\WeChatData\xwechat_files
-wxid_xxxxxxxxxxxxxxxx_abcd=工作
-wxid_yyyyyyyyyyyyyyyy_ef01=私人
-```
-
-- 一行一个 `DataRoot`，可以写多个微信数据目录；
-- 一行一个 `wxid_xxx=名字`；
-- 直接用记事本改、保存，工具 2 秒内会读到并应用；
-- 托盘菜单「打开配置文件」可以直接打开它。
-
-发版流程：改版本号（`src/AssemblyInfo.cs`）→ `build.bat` → 把 exe 和 zip 放进 `dist\<版本号>\` → 生成 `SHA256SUMS.txt` → 传到 GitHub Releases。
-
-## 构建
-
-只需要 Windows 自带的 .NET Framework 4.x，不需要 Visual Studio、不需要 .NET SDK：
-
-```bat
-build.bat
-```
-
-等价的手工命令写在「安全声明 → 可复现编译」里。产物是单文件 `WeChatTabName.exe`。
-
-> 重新编译的二进制哈希**必然**与发行版不同（PE 时间戳和模块 GUID 每次都会变），功能一致，别拿哈希对不上当篡改。
 
 ## 卸载
 
@@ -191,25 +123,6 @@ build.bat
 
 除此之外**不产生任何文件**。
 
-### 可复现编译
-
-源码完整提供，用 Windows 自带的 C# 编译器即可复现：
-
-```bat
-build.bat
-```
-
-或手动：
-
-```bat
-"%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /optimize+ /codepage:65001 ^
- /win32icon:src\app.ico /win32manifest:src\app.manifest /out:WeChatTabName.exe ^
- /r:System.dll /r:System.Core.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll ^
- src\WeChatTabName.cs src\AssemblyInfo.cs
-```
-
-> 重新编译出的文件和发行版**功能完全相同，但哈希值会不一样**：C# 编译器每次会在 PE 头写入新的时间戳和模块 GUID，这是正常现象，不代表文件被人改过。对比功能请对比源码，而不是对比哈希。
-
 ## 为什么会被杀毒软件误报
 
 这是**未签名的国产小工具几乎必然遇到的**，不是本工具独有：
@@ -245,31 +158,6 @@ build.bat
 1. 右键 exe →「属性」→ 底部勾选「解除锁定」→ 确定；
 2. 或运行时点「更多信息」→「仍要运行」。
 
-### 提交误报（推荐，一劳永逸）
-
-- 微软：<https://www.microsoft.com/en-us/wdsi/filesubmission>（选「软件开发者」提交，通常 24~72 小时处理）
-- 火绒：火绒论坛「误报反馈」版块，或官网客服提交样本
-- 360：360 开放平台 <https://open.360.cn/> 的样本误报反馈入口
-
-### 根本解决办法
-
-买一张代码签名证书（OV/EV），给 exe 签名后误报率会大幅下降。个人开发者用 OV 证书（约每年一两千元）即可；EV 证书能立刻建立 SmartScreen 信誉。**没有签名之前，任何"保证不被杀"的说法都是不成立的**，请不要相信宣称"免杀"的版本——那类文件通常真的有问题。
-
-## 校验下载到的文件
-
-在 PowerShell 或 CMD 里执行：
-
-```bat
-certutil -hashfile WeChatTabName.exe SHA256
-```
-
-应与本说明开头的 SHA-256 完全一致：
-
-```
-C62430F8D18BDA08B7BB5EB800FE4B17600C1C34092BFA852F22A8A9E48EBFA4
-```
-
-大小应为 `37,376` 字节。若不一致，说明文件被篡改或版本不对，不要运行。
 
 ## 常见问题
 
@@ -341,5 +229,9 @@ A：支持，每个账号按一次 `Ctrl+Alt+R` 起名即可，没有数量限�
 
 ## 打赏
 
-如果它帮你省了事，可以请作者喝杯咖啡（爱发电 / 赞赏码，发布时补链接）。
+如果它帮你省了事，可以请作者喝杯咖啡
+
+https://afdian.com/a/HXY7338LOVE?utm_source=copylink&utm_medium=link
+
 纯属自愿，不影响任何功能——本工具永远免费开源。
+作者邮箱：drdu7338@163.com
