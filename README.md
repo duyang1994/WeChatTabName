@@ -11,6 +11,7 @@
 - SHA-256：`C62430F8D18BDA08B7BB5EB800FE4B17600C1C34092BFA852F22A8A9E48EBFA4`
 
 > **下载**：本仓库 Releases 里的 `WeChatTabName-1.0.0.zip`（exe + 说明 + 源码）
+> **压缩包内容**：`WeChatTabName.exe` + `README.md` + `LICENSE` + `build.bat` + `src/` 源码；分发二进制时附带源码是 GPL-3.0 的要求，也可以自己改、自己编译。
 
 
 ## 使用方法
@@ -159,6 +160,16 @@ Windows 11 任务栏默认「合并按钮 + 隐藏标签」，多开两个微信
 2. 或运行时点「更多信息」→「仍要运行」。
 
 
+## 校验下载到的文件
+
+在 PowerShell 或 CMD 里执行：
+
+```bat
+certutil -hashfile WeChatTabName.exe SHA256
+```
+
+应与本说明开头的 SHA-256 一致（`C62430F8…48EBFA4`），大小 `37,376` 字节。不一致就不要运行。
+
 ## 常见问题
 
 **Q：按 Ctrl+Alt+R 没反应？**
@@ -223,15 +234,16 @@ A：支持，每个账号按一次 `Ctrl+Alt+R` 起名即可，没有数量限�
 
 ## 反馈与贡献
 
-**提 Issue 请附**：Windows 版本、微信版本、`config.ini` 内容（**wxid 请截掉后 4 位**）、现象截图。
+**上不了 GitHub 也能反馈**：到 [爱发电主页](https://afdian.com/a/HXY7338LOVE) 发私信即可（作者需要在爱发电后台把「接收私信」打开）。
+
+**有 GitHub 的**：提 Issue 请附 Windows 版本、微信版本、`config.ini` 内容（**wxid 请截掉后 4 位**）、现象截图。
 
 **欢迎 PR**，但请守住范围：只做“窗口标题/窗口识别”，不要引入消息自动化、协议登录一类功能——那会让项目变成外挂，风险完全不同。
 
 ## 打赏
 
-如果它帮你省了事，可以请作者喝杯咖啡
+如果它帮你省了事，可以请作者喝杯咖啡：
 
-https://afdian.com/a/HXY7338LOVE?utm_source=copylink&utm_medium=link
+https://afdian.com/a/HXY7338LOVE
 
 纯属自愿，不影响任何功能——本工具永远免费开源。
-作者邮箱：drdu7338@163.com
